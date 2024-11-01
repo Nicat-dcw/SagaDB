@@ -1,14 +1,12 @@
 import { promises as fs } from 'fs';
 import NodeCache from 'node-cache';
-import { EncryptionStrategy, EncryptionConfig } from './encryption';
-import { DBOptions, DBData, BackupStrategy } from './types';
+import { EncryptionStrategy, EncryptionConfig } from './util/encryption';
+import { DBOptions, DBData, BackupStrategy } from './types/types';
 
-import { JsonHandler } from './json';
+import { JsonHandler } from './database/json';
+import { useNetworkBackup, useLocalBackup } from './util/backup';
+import { useEncryption } from './util/encryption'
 
-<<<<<<< HEAD
-=======
-
->>>>>>> a461849 (Encryption added,write speed increased)
 export class SagaDB {
   private dbPath: string;
   private backup?: BackupStrategy;
@@ -18,7 +16,7 @@ export class SagaDB {
   private jsonHandler: JsonHandler;
   private encryption?: EncryptionStrategy;
 
-  constructor(options: DBOptions = {}) {
+  constructor(options?: DBOptions = {}) {
     this.dbPath = options.dbPath || 'db.json';
     this.backup = options.backup;
     this.cache = new NodeCache({ stdTTL: 0 });
@@ -92,3 +90,5 @@ export class SagaDB {
     }
   }
 }
+
+export { useLocalBackup, useNetworkBackup,useEncryption }

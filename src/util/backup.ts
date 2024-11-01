@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { BackupStrategy, NetworkBackupConfig, LocalBackupConfig } from './types';
+import { BackupStrategy, NetworkBackupConfig, LocalBackupConfig } from '../types/types';
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 

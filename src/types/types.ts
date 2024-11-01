@@ -1,5 +1,5 @@
 import { JSONSchemaType } from 'ajv';
-import { EncryptionStrategy } from './encryption';
+import { EncryptionStrategy } from './util/encryption';
 
 export interface DBOptions<T = any> {
   dbPath?: string;
