@@ -1,9 +1,9 @@
-import { FastJsonDB } from './db';
+import { SagaDB } from './db';
 import { useNetworkBackup, useLocalBackup } from './backup';
 
 async function demo() {
   // Initialize database with network backup
-  const db = new FastJsonDB({
+  const db = new SagaDB({
     dbPath: 'mydb.json',
     /*backup: useNetworkBackup({
       url: 'https://your-backup-server.com/backup',
@@ -13,7 +13,7 @@ async function demo() {
   });
 
   // Or with local backup
-  const dbLocal = new FastJsonDB({
+  const dbLocal = new SagaDB({
     dbPath: 'mydb-local.json',
    /* backup: useLocalBackup({
       backupPath: './backups',
