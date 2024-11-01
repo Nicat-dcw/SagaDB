@@ -5,10 +5,7 @@ import { DBOptions, DBData, BackupStrategy } from './types';
 
 import { JsonHandler } from './json';
 
-<<<<<<< HEAD
-=======
 
->>>>>>> a461849 (Encryption added,write speed increased)
 export class SagaDB {
   private dbPath: string;
   private backup?: BackupStrategy;
