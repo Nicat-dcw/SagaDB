@@ -3,7 +3,7 @@ import NodeCache from 'node-cache';
 import { DBOptions, DBData, BackupStrategy } from './types';
 import { JsonHandler } from './json';
 
-export class FastJsonDB {
+export class SagaDB {
   private dbPath: string;
   private backup?: BackupStrategy;
   private cache: NodeCache;
