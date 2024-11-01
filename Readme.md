@@ -16,6 +16,16 @@ A high-performance, TypeScript-based JSON database with advanced caching and bac
 ```bash
 npm install sagadb
 ```
+## Benchmark 📊:
+| Metric           | Speed                      | Time per Operation | Faster than 1 ms? |
+|------------------|----------------------------|---------------------|--------------------|
+| **Write Speed**  | 1,671.82 ops/sec           | 0.598 ms           | Yes               |
+| **Read Speed**   | 292,315.74 ops/sec         | 0.00342 ms         | Yes               |
+
+### Benchmark Summary
+- **Write Speed**: The write operations are completed at a speed of approximately 1,671.82 operations per second, translating to 0.598 ms per operation.
+- **Read Speed**: The read operations achieve an impressive speed of around 292,315.74 operations per second, or 0.00342 ms per operation.
+- **Performance**: Both read and write operations are faster than 1 ms, making this JSON database module highly suitable for applications requiring quick data access.
 
 ## Quick Start 🌟
 
