@@ -7,6 +7,10 @@ import { JsonHandler } from './database/json';
 import { useNetworkBackup, useLocalBackup } from './util/backup';
 import { useEncryption } from './util/encryption'
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a1a8d189d244337aece7db6cf7226d6661b45410
 export class SagaDB {
   private dbPath: string;
   private backup?: BackupStrategy;
