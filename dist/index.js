@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("./db");
 async function demo() {
     // Initialize database with network backup
-    const db = new db_1.FastJsonDB({
+    const db = new db_1.SagaDB({
         dbPath: 'mydb.json',
         /*backup: useNetworkBackup({
           url: 'https://your-backup-server.com/backup',
@@ -12,7 +12,7 @@ async function demo() {
         })*/
     });
     // Or with local backup
-    const dbLocal = new db_1.FastJsonDB({
+    const dbLocal = new db_1.SagaDB({
         dbPath: 'mydb-local.json',
         /* backup: useLocalBackup({
            backupPath: './backups',

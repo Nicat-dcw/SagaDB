@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FastJsonDB = void 0;
+exports.SagaDB = void 0;
 const node_cache_1 = __importDefault(require("node-cache"));
 const json_1 = require("./json");
-class FastJsonDB {
+class SagaDB {
     constructor(options = {}) {
         this.dbPath = options.dbPath || 'db.json';
         this.backup = options.backup;
@@ -14,10 +14,15 @@ class FastJsonDB {
         this.data = {};
         this.initialized = false;
         this.jsonHandler = new json_1.JsonHandler();
+        this.encryption = options.encryption;
     }
     async init() {
         try {
-            this.data = await this.jsonHandler.read(this.dbPath);
+            let fileData = await this.jsonHandler.read(this.dbPath);
+            if (this.encryption && Object.keys(fileData).length > 0) {
+                fileData = await this.encryption.decrypt(fileData);
+            }
+            this.data = fileData;
             this.cache.mset(Object.entries(this.data).map(([k, v]) => ({ key: k, val: v })));
         }
         catch (err) {
@@ -54,15 +59,19 @@ class FastJsonDB {
         await this.save();
     }
     async save() {
-        await this.jsonHandler.write(this.dbPath, this.data);
+        let dataToSave = this.data;
+        if (this.encryption) {
+            dataToSave = await this.encryption.encrypt(this.data);
+        }
+        await this.jsonHandler.write(this.dbPath, dataToSave);
         if (this.backup) {
             try {
-                await this.backup.save(this.data);
+                await this.backup.save(dataToSave);
             }
             catch (error) {
-                console.error('Backup failed:', error instanceof Error ? error.message : error);
+                console.error('Backup failed:', error.message);
             }
         }
     }
 }
-exports.FastJsonDB = FastJsonDB;
+exports.SagaDB = SagaDB;

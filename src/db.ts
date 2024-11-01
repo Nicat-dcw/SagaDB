@@ -1,8 +1,14 @@
 import { promises as fs } from 'fs';
 import NodeCache from 'node-cache';
+import { EncryptionStrategy, EncryptionConfig } from './encryption';
 import { DBOptions, DBData, BackupStrategy } from './types';
+
 import { JsonHandler } from './json';
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a461849 (Encryption added,write speed increased)
 export class SagaDB {
   private dbPath: string;
   private backup?: BackupStrategy;
@@ -10,19 +16,27 @@ export class SagaDB {
   private data: DBData;
   private initialized: boolean;
   private jsonHandler: JsonHandler;
+  private encryption?: EncryptionStrategy;
 
-  constructor(options: DBOptions<DBData> = {}) {
-    this.dbPath = options.dbPath || 'saga.json';
+  constructor(options: DBOptions = {}) {
+    this.dbPath = options.dbPath || 'db.json';
     this.backup = options.backup;
     this.cache = new NodeCache({ stdTTL: 0 });
     this.data = {};
     this.initialized = false;
     this.jsonHandler = new JsonHandler();
+    this.encryption = options.encryption;
   }
 
   private async init(): Promise<void> {
     try {
-      this.data = await this.jsonHandler.read(this.dbPath);
+      let fileData = await this.jsonHandler.read(this.dbPath);
+      
+      if (this.encryption && Object.keys(fileData).length > 0) {
+        fileData = await this.encryption.decrypt(fileData);
+      }
+      
+      this.data = fileData;
       this.cache.mset(
         Object.entries(this.data).map(([k, v]) => ({ key: k, val: v }))
       );
@@ -35,6 +49,7 @@ export class SagaDB {
     }
     this.initialized = true;
   }
+
 
   async get<T>(key: string): Promise<T | undefined> {
     if (!this.initialized) await this.init();
@@ -58,14 +73,21 @@ export class SagaDB {
     await this.save();
   }
 
+  
   private async save(): Promise<void> {
-    await this.jsonHandler.write(this.dbPath, this.data);
+    let dataToSave = this.data;
+    
+    if (this.encryption) {
+      dataToSave = await this.encryption.encrypt(this.data);
+    }
+    
+    await this.jsonHandler.write(this.dbPath, dataToSave);
     
     if (this.backup) {
       try {
-        await this.backup.save(this.data);
-      } catch (error: unknown) {
-        console.error('Backup failed:', error instanceof Error ? error.message : error);
+        await this.backup.save(dataToSave);
+      } catch (error:any) {
+        console.error('Backup failed:', error.message);
       }
     }
   }

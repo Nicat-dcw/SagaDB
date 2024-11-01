@@ -1,10 +1,13 @@
 import { JSONSchemaType } from 'ajv';
+import { EncryptionStrategy } from './encryption';
 
-export interface DBOptions<T> {
+export interface DBOptions<T = any> {
   dbPath?: string;
   backup?: BackupStrategy;
   schema?: JSONSchemaType<T>;
+  encryption?: EncryptionStrategy;
 }
+
 
 export interface DBData {
   [key: string]: any;
