@@ -1,0 +1,23 @@
+{
+  "name": "saga-db",
+  "version": "1.0.0",
+  "module": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch run src/index.ts",
+    "build": "bun build src/index.ts --outdir ./dist",
+    "test": "bun test",
+    "benchmark": "bun run src/benchmark.ts"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "node-cache": "^5.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.9",
+    "bun-types": "latest",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.2"
+  }
+}
