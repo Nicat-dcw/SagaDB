@@ -1,6 +1,6 @@
 # SagaDB 🚀
 
-A high-performance, TypeScript-based JSON database with advanced caching and backup features.
+A high-performance, TypeScript-based JSON database with advanced caching and backup features, optimized for Bun runtime.
 
 ## Features ✨
 
@@ -9,13 +9,15 @@ A high-performance, TypeScript-based JSON database with advanced caching and bac
 - 🔄 Retry mechanism for network operations
 - 📊 JSON Schema validation support
 - 🎯 Type-safe operations with TypeScript
-- ⚡ Asynchronous I/O operations
+- ⚡ Optimized for Bun runtime
+- 🚄 Asynchronous I/O operations
 
 ## Installation 📦
 
 ```bash
-npm install sagadb
+bun add sagadb
 ```
+
 ## Benchmark 📊:
 | Metric           | Speed                      | Time per Operation | Faster than 1 ms? |
 |------------------|----------------------------|---------------------|--------------------|
@@ -30,8 +32,8 @@ npm install sagadb
 ## Quick Start 🌟
 
 ```typescript
-import { SagaDB } from './db';
-import { useLocalBackup } from './backup';
+import { SagaDB } from 'sagadb';
+import { useLocalBackup } from 'sagadb/backup';
 
 // Initialize with local backup
 const db = new SagaDB({
@@ -101,16 +103,16 @@ const user = await db.get<User>('user:1');
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Build the project
-npm run build
+bun run build
 
 # Run tests
-npm test
+bun test
 
 # Start the demo
-npm start
+bun start
 ```
 
 ## License 📄
