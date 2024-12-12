@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "module": "dist/index.js",
   "type": "module",
+  "types":"./src/types/types.ts",
   "scripts": {
     "start": "bun run src/index.ts",
     "dev": "bun --watch run src/index.ts",
