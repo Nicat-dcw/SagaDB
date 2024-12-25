@@ -1,66 +1,43 @@
 import NodeCache from 'node-cache';
 import { EncryptionStrategy } from './util/encryption';
-import { DBOptions, DBData, BackupStrategy } from './types/types';
-import { JsonHandler } from './database/json';
-import { useNetworkBackup, useLocalBackup } from './util/backup';
-import { useEncryption } from './util/encryption';
+import { DBOptions, DBData, BackupStrategy, DatabaseDriver } from './types/types';
+import { createDriver } from './database/driver';
 
 export class SagaDB {
-  private dbPath: string;
-  private backup?: BackupStrategy;
+  private driver: DatabaseDriver;
   private cache: NodeCache;
-  private data: DBData;
-  private initialized: boolean;
-  private jsonHandler: JsonHandler;
-  private encryption?: EncryptionStrategy;
+  private initialized: boolean = false;
+  private data: DBData = {};
 
   constructor(options: DBOptions = {}) {
-    this.dbPath = options.dbPath || 'db.json';
-    this.backup = options.backup;
     this.cache = new NodeCache({ stdTTL: 0 });
-    this.data = {};
-    this.initialized = false;
-    this.jsonHandler = new JsonHandler();
-    this.encryption = options.encryption;
-  }
-
-  private async init(): Promise<void> {
-    try {
-      const fileExists = await Bun.file(this.dbPath).exists();
-      if (!fileExists) {
-        await this.save();
-        return;
-      }
-
-      const fileData = await Bun.file(this.dbPath).text();
-      let parsedData = JSON.parse(fileData);
-      
-      if (this.encryption && Object.keys(parsedData).length > 0) {
-        parsedData = await this.encryption.decrypt(parsedData);
-      }
-      
-      this.data = parsedData;
-      this.cache.mset(
-        Object.entries(this.data).map(([k, v]) => ({ key: k, val: v }))
-      );
-    } catch (err) {
-      throw err;
-    }
-    this.initialized = true;
+    this.driver = createDriver(options);
   }
 
   async get<T>(key: string): Promise<T | undefined> {
     if (!this.initialized) await this.init();
     const cached = this.cache.get<T>(key);
     if (cached !== undefined) return cached;
-    return this.data[key] as T | undefined;
+    return this.driver.get<T>(key);
+  }
+
+  private async init(): Promise<void> {
+    try {
+      const data = await this.driver.getAll();
+      this.cache.mset(
+        Object.entries(data).map(([k, v]) => ({ key: k, val: v }))
+      );
+      this.initialized = true;
+    } catch (err) {
+      throw err;
+    }
   }
 
   async set<T>(key: string, value: T): Promise<T> {
     if (!this.initialized) await this.init();
     this.data[key] = value;
     this.cache.set(key, value);
-    await this.save();
+    await this.driver.set(key, value);
     return value;
   }
 
@@ -68,26 +45,6 @@ export class SagaDB {
     if (!this.initialized) await this.init();
     delete this.data[key];
     this.cache.del(key);
-    await this.save();
-  }
-
-  private async save(): Promise<void> {
-    let dataToSave = this.data;
-    
-    if (this.encryption) {
-      dataToSave = await this.encryption.encrypt(this.data);
-    }
-    
-    await this.jsonHandler.write(this.dbPath, dataToSave);
-    
-    if (this.backup) {
-      try {
-        await this.backup.save(dataToSave);
-      } catch (error: any) {
-        console.error('Backup failed:', error.message);
-      }
-    }
+    await this.driver.delete(key);
   }
 }
-
-export { useLocalBackup, useNetworkBackup, useEncryption };

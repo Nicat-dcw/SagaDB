@@ -1,13 +1,20 @@
 import { JSONSchemaType } from 'ajv';
-import { EncryptionStrategy } from './util/encryption';
+import { EncryptionStrategy } from '../util/encryption';
 
 export interface DBOptions<T = any> {
   dbPath?: string;
   backup?: BackupStrategy;
   schema?: JSONSchemaType<T>;
   encryption?: EncryptionStrategy;
+  driver?: 'json' | 'sqlite' | DatabaseDriver;
 }
 
+export interface DatabaseDriver {
+  get<T>(key: string): Promise<T | undefined>;
+  set<T>(key: string, value: T): Promise<T>;
+  delete(key: string): Promise<void>;
+  getAll(): Promise<DBData>;
+}
 
 export interface DBData {
   [key: string]: any;

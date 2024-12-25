@@ -103,7 +103,7 @@ const user = await db.get<User>('user:1');
 
 ```bash
 # Install dependencies
-bun install
+bun add
 
 # Build the project
 bun run build

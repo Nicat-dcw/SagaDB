@@ -1,13 +1,9 @@
 {
-  "name": "saga-db",
+  "name": "sagadb",
   "version": "1.0.0",
   "module": "dist/db.js",
   "type": "module",
-<<<<<<< HEAD
   "types": "./src/types/types.ts",
-=======
-  "types":"./src/types/types.ts",
->>>>>>> 40edbd788b84aced264794076b9f93e71fa5bc6d
   "scripts": {
     "start": "bun run src/index.ts",
     "dev": "bun --watch run src/index.ts",
@@ -19,6 +15,8 @@
     "ajv": "^8.12.0",
     "node-cache": "^5.1.2"
   },
+  "homepage": "https://github.com/Nicat-dcw/sagadb",
+  "keywords": ["local database", "local storage", "local db", "local storage", "local db", "local storage", "local db", "local storage", "local db","Json Database","Local Database","Local Storage","Local DB","Local Storage","Local DB","Local Storage","Local DB","Local Storage","Local DB","Json Database", "Database"],
   "devDependencies": {
     "@types/node": "^20.17.9",
     "bun-types": "latest",

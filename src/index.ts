@@ -3,7 +3,8 @@ import { SagaDB } from './db';
 async function demo() {
   // Initialize database with network backup
   const db = new SagaDB({
-    dbPath: 'mydb.json',
+   // dbPath: 'mydb.json',
+    driver: 'json'
     /*backup: useNetworkBackup({
       url: 'https://your-backup-server.com/backup',
       retries: 3,
