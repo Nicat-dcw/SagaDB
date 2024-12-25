@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "module": "dist/db.js",
   "type": "module",
+<<<<<<< HEAD
   "types": "./src/types/types.ts",
+=======
+  "types":"./src/types/types.ts",
+>>>>>>> 40edbd788b84aced264794076b9f93e71fa5bc6d
   "scripts": {
     "start": "bun run src/index.ts",
     "dev": "bun --watch run src/index.ts",
