@@ -1,6 +1,6 @@
 import { JSONSchemaType } from 'ajv';
 import { EncryptionStrategy } from '../util/encryption';
-import SagaDB from '../db';
+import {SagaDB} from '../db';
 export { SagaDB };
 export interface SagaDBType {
   constructor(options: DBOptions): SagaDBType;
