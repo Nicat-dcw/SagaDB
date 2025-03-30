@@ -1,46 +1,35 @@
-import { SagaDB } from './db';
+import { SagaDB } from './db.ts';
+import { readdirSync } from 'fs';
+import { join } from 'path';
+import { Glob } from 'bun';
 
-async function demo() {
-  // Initialize database with network backup
-  const db = new SagaDB({
-   // dbPath: 'mydb.json',
-    driver: 'json'
-    /*backup: useNetworkBackup({
-      url: 'https://your-backup-server.com/backup',
-      retries: 3,
-      backupPath: './backups' // Optional local fallback
-    })*/
-   
+
+export { SagaDB };
+
+
+export * from './types/types.js';
+
+
+const glob = new Glob('**/*.ts');
+
+
+(async () => {
+  const entrypoints = await Array.fromAsync(glob.scan({ cwd: './src' }));
+
+
+  await Bun.build({
+    target: 'bun',
+    entrypoints: [
+      './src/db.ts',
+      './src/index.ts',
+      './src/util/backup.ts',
+      './src/util/encryption.ts',
+      './src/types/types.ts',
+      './src/database/driver.ts',
+      './src/database/json.ts',
+      './src/database/sqlite.ts'
+    ],
+    outdir: './dist',
+    format: 'esm',
   });
-
-  // Or with local backup
-  const dbLocal = new SagaDB({
-    dbPath: 'mydb-local.json',
-   /* backup: useLocalBackup({
-      backupPath: './backups',
-      maxBackups: 5
-    })*/
-  });
-
-  // Performance test
-  console.log('Starting performance test...');
-
-  // Write test
-  const writeStart = performance.now();
-  for (let i = 0; i < 1000; i++) {
-    await db.set(`key${i}`, { value: `value${i}` });
-  }
-  const writeEnd = performance.now();
-
-  // Read test
-  const readStart = performance.now();
-  for (let i = 0; i < 10000; i++) {
-    await db.get<{ value: string }>(`key${i % 1000}`);
-  }
-  const readEnd = performance.now();
-
-  console.log(`Write speed: ${1000 / ((writeEnd - writeStart) / 1000)} ops/sec`);
-  console.log(`Read speed: ${10000 / ((readEnd - readStart) / 1000)} ops/sec`);
-}
-
-demo().catch(console.error);
+})();
