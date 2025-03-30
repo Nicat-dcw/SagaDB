@@ -2,12 +2,16 @@
   "name": "sagadb",
   "version": "1.0.0",
   "module": "dist/db.js",
+  "main": "dist/db.js",
   "type": "module",
   "types": "./src/types/types.ts",
+  "exports": {
+    ".": "./dist/db.js"
+  },
   "scripts": {
     "start": "bun run src/index.ts",
     "dev": "bun --watch run src/index.ts",
-    "build": "bun build src/index.ts --outdir ./dist",
+    "build": "bun build src/index.ts --target bun --outdir ./dist",
     "test": "bun test",
     "benchmark": "bun run src/benchmark.ts"
   },
