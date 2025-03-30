@@ -1,5 +1,14 @@
 import { JSONSchemaType } from 'ajv';
 import { EncryptionStrategy } from '../util/encryption';
+import SagaDB from '../db';
+export { SagaDB };
+export interface SagaDBType {
+  constructor(options: DBOptions): SagaDBType;
+  get<T>(key: string): Promise<T | undefined>;
+  set<T>(key: string, value: T): Promise<T>;
+  delete(key: string): Promise<void>;
+  getAll(): Promise<DBData>;
+}
 
 export interface DBOptions<T = any> {
   dbPath?: string;
